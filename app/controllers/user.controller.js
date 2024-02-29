@@ -1,17 +1,17 @@
 const ApiError = require("../api-error");
-const CustomerService = require("../services/customer.service");
+const UserService = require("../services/user.service");
 const MongoDB = require("../utils/mongodb.util");
 
 exports.create = async (req, res, next) => {
-   if (!req.body?.MSKH) {
+   if (!req.body?.UserID) {
         return next(new ApiError(404,"Name can not empty"));
    }
 
    try {
-        const customerService = new CustomerService(MongoDB.client);
-        const checkEmail = await customerService.findByEmail(req.body.Email);
+        const userService = new UserService(MongoDB.client);
+        const checkEmail = await userService.findByEmail(req.body.Email);
         if (!checkEmail) {
-            const document = await customerService.create(req.body);
+            const document = await userService.create(req.body);
             return res.send(document);
         } else {
             return res.send({message : "Email đã tồn tại"})
@@ -24,27 +24,35 @@ exports.create = async (req, res, next) => {
    }
 };
 
-// exports.findAll = async (req, res, next) => {
-//     let documents = [];
+exports.findAll = async (req, res, next) => {
+    let documents = [];
+    try {
+        const userService = new UserService(MongoDB.client);
+        documents = await userService.find({});
+    } catch (error) {
+        return next(
+            new ApiError(500, "An error occurred while retrieving contacs")
+        );
+    };
+    return res.send(documents);
 
-//     try {
-//         const productService = new ProductService(MongoDB.client);
-//         const { MSHH } = req.query;
-//         if (MSHH) {
-//             documents = await productService.findByName(MSHH);
-//         } else {
-//             documents = await productService.find({});
-//         }
-//     } catch (error) {
-//         return next(
-//             new ApiError(500, "An error occurred while retrieving contacs")
-//         );
-//     };
-
-//     return res.send(documents);
-
-// };
-
+};
+exports.findByMSKH = async (req, res, next) => {
+    try {
+        const customerService = new CustomerService(MongoDB.client);
+        const document = await customerService.findByMSKH(req.body.MSKH);
+        if (!document) {
+            return next(new ApiError(404, "Contact not fuond"));
+        }
+        return res.send(document);
+    } catch (error) {
+        return next(
+            new ApiError(
+                500, `Error retrieving contact with id=${req.body.Email}`
+            )
+        );
+    }
+}
 exports.findOne = async (req, res, next) => {
     try {
         const customerService = new CustomerService(MongoDB.client);
@@ -96,23 +104,23 @@ exports.update = async (req, res, next) => {
    }
 };
 
-// exports.delete = async (req, res, next ) => {
-//     try {
-//         const productService = new ProductService(MongoDB.client);
-//         const document = await productService.delete(req.params.id);
-//         if (!document) {
-//             return next(new ApiError(404, "Contact not found"));
-//         }
+exports.delete = async (req, res, next ) => {
+    try {
+        const customerService = new CustomerService(MongoDB.client);
+        const document = await customerService.delete(req.params.id);
+        if (!document) {
+            return next(new ApiError(404, "Contact not found"));
+        }
 
-//         return res.send({ message: "Contact was deleted successfully" });
-//     } catch (error){
-//         return next(
-//             new ApiError(
-//                 500, `Could not delete contact with id=${req.params.id}`
-//             )
-//         );
-//     }
-// };
+        return res.send({ message: "Contact was deleted successfully" });
+    } catch (error){
+        return next(
+            new ApiError(
+                500, `Could not delete contact with id=${req.params.id}`
+            )
+        );
+    }
+};
 
 // exports.deleteAll = async(_req, res, next) => {
 //     try {
