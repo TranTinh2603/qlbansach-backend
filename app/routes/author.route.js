@@ -1,13 +1,11 @@
 const express = require("express");
-const books = require("../controllers/book.controller");
+const authors = require("../controllers/author.controller");
 const router = express.Router();
 
 
-router.route("/")
-    .get(books.findAll)
+router.route("/:name")
+    .get(authors.findByName)
 // .post(products.create)
 // .delete(products.deleteAll);
-router.route("/find/:bookId")
-    .get(books.findById)
 
 module.exports = router;

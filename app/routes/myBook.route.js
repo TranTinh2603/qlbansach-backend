@@ -5,7 +5,16 @@ const router = express.Router();
 
 router.route("/")
     .get(myBooks.findAll)
-// .post(products.create)
+    .post(myBooks.create)
 // .delete(products.deleteAll);
+router.route("/find")
+    .post(myBooks.findByStatus)
+
+router.route("/:userId")
+    .get(myBooks.findByUserId)
+
+router.route("/find/:userId&:bookId")
+    .get(myBooks.findByUserIdAndBookId)
+    .put(myBooks.update)
 
 module.exports = router;

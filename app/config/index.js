@@ -1,6 +1,7 @@
 const config = {
     app: {
-        port: process.env.PORT || 3000,
+        port1: process.env.PORT || 3000,
+        port2: process.env.PORT || 8888,
     },
     db: {
         uri: process.env.MONGODB_URI || "mongodb://127.0.0.1:27017/social-network"

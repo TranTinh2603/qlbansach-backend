@@ -25,6 +25,12 @@ class BookService {
         const cursor = await this.Book.find(filter);
         return await cursor.toArray();
     }
+
+    async findById(id) {
+        return await this.Book.findOne({
+            bookId: id
+        });
+    }
 }
 
 

@@ -21,3 +21,19 @@ exports.findAll = async (req, res, next) => {
     return res.send(documents);
 
 };
+exports.findById = async (req, res, next) => {
+    try {
+        const bookService = new BookService(MongoDB.client);
+        const document = await bookService.findById(req.params.bookId);
+        if (!document) {
+            return next(new ApiError(404, "Contact not fuond"));
+        }
+        return res.send(document);
+    } catch (error) {
+        return next(
+            new ApiError(
+                500, `Error retrieving contact with id=${req.params.id}`
+            )
+        );
+    }
+}

@@ -21,65 +21,69 @@ class UserService {
         return user;
     }
 
-    async create(payload) {
-        console.log(payload);
-        const user = this.extractUserData(payload);
-        console.log(user);
-        const result = await this.User.insertOne(
-            user,
-        );
-        return result;
-    }
+    // async create(payload) {
+    //     console.log(payload);
+    //     const user = this.extractUserData(payload);
+    //     console.log(user);
+    //     const result = await this.User.insertOne(
+    //         user,
+    //     );
+    //     return result;
+    // }
 
     async find(filter) {
         const cursor = await this.User.find(filter).limit(15);
         return await cursor.toArray();
     }
 
+    // async findByEmail(email) {
+    //     return await this.User.findOne({
+    //         Email: email
+    //     });
+    // }
+    async findByName(name) {
+        const result = await this.User.find({
+            Name: name
+        });
+        return result.toArray();
+    }
+    // async findByMSKH(mskh) {
+    //     return await this.Customer.findOne({
+    //         MSKH: mskh
+    //     });
+    // }
+
+    async findByUserId(userId) {
+        return await this.User.findOne({
+            userId: userId
+        });
+    }
     async findByEmail(email) {
         return await this.User.findOne({
             Email: email
         });
     }
-    async findByName(name) {
-        return await this.Customer.findOne({
-            Name: name
-        });
-    }
-    async findByMSKH(mskh) {
-        return await this.Customer.findOne({
-            MSKH: mskh
-        });
-    }
 
-    async findById(id) {
-        return await this.Customer.findOne({
-            _id: ObjectId.isValid(id) ? new ObjectId(id) : null,
-        });
-    }
-
-    async update(id, payload) {
+    async updateFriends(userId, friends) {
         const filter = {
-            _id: ObjectId.isValid(id) ? new ObjectId(id) : null,
+            userId: userId
         };
-
-        const update = this.extractCustomerData(payload);
-        const result = await this.Customer.findOneAndUpdate(
+        const result = await this.User.findOneAndUpdate(
             filter,
-            { $set: update },
+            { $set: { Friends: friends } },
             { returnDocument: "after" }
         );
 
         return result;
     }
 
-    async delete(id) {
-        const result = await this.Customer.findOneAndDelete({
-            _id: ObjectId.isValid(id) ? new ObjectId(id) : null,
-        });
+    // async delete(id) {
+    //     const result = await this.Customer.findOneAndDelete({
+    //         _id: ObjectId.isValid(id) ? new ObjectId(id) : null,
+    //     });
 
-        return result;
-    }
+    //     return result;
+    // }
 
     // async deleteAll() {
     //     const result = await this.Staff.deleteMany({});
