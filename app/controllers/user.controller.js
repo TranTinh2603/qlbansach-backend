@@ -37,6 +37,19 @@ exports.findAll = async (req, res, next) => {
     return res.send(documents);
 
 };
+exports.findAllUser = async () => {
+    let documents = [];
+    try {
+        const userService = new UserService(MongoDB.client);
+        documents = await userService.find({});
+    } catch (error) {
+        return next(
+            new ApiError(500, "An error occurred while retrieving contacs")
+        );
+    };
+    return documents;
+
+};
 exports.findByUserId = async (req, res, next) => {
     try {
         const userService = new UserService(MongoDB.client);
