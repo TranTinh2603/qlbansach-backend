@@ -39,6 +39,12 @@ class ReviewService {
         );
         return result;
     }
+    async findByUserId(userId) {
+        const cursor = await this.ReviewService.find({
+            userId: userId,
+        });
+        return await cursor.toArray();
+    }
 
 }
 

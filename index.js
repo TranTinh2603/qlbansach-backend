@@ -3,9 +3,11 @@ const config = require("./app/config");
 const http = require("http");
 const socketIo = require("socket.io");
 const MongoDB = require("./app/utils/mongodb.util");
-const MessageController = require("./app/controllers/message.controller");
-const UserController = require("./app/controllers/user.controller");
-
+// const UserController = require("./app/controllers/user.controller");
+const initializeUserSockets = require("./app/socket/userSocketInitialization");
+const notification = require("./app/socket/notification");
+const message = require("./app/socket/message");
+const quote = require("./app/socket/quote");
 async function startServer() {
     try {
         await MongoDB.connect(config.db.uri);
@@ -20,59 +22,27 @@ async function startServer() {
         });
 
 
-        let users = [];
-        users = await UserController.findAllUser();
-        for (const user of users) {
-            user['socketId'] = null
-        }
+        // let users = [];
+        // users = await UserController.findAllUser();
+        // for (const user of users) {
+        //     user['socketId'] = null
+        // }
+        let users = await initializeUserSockets();
 
         io.on('connection', async (socket) => {
             console.log('A user connected');
-            socket.on('getMessage', async (a, b) => {
-                const getMessage = await MessageController.findBySenderIdAndReceiverId(a, b);
-                socket.emit('getMessage', getMessage);
-            });
-            socket.on('room', async (data) => {
-                const rooms = await MessageController.findBySenderIdAndReceiverId(data.senderId, data.receiverId);
-                if (rooms.length > 0) {
-                    for (const room of rooms) {
-                        socket.join(room.roomId);
-                        break
-                    }
-                } else {
-                    const createRoom = await MessageController.create(data);
-                    socket.join(data.roomId);
-                }
-
-
-            })
-            // const message = await MessageController.findAll();
-            // // console.log(message);
-            // socket.emit('message', message);
-            socket.on('chat message', async (msg) => {
-                const createMessage = await MessageController.create(msg);
-                const getMessage = await MessageController.findBySenderIdAndReceiverId(msg.senderId, msg.receiverId);
-                socket.emit('chat message', getMessage);
-                io.to(msg.roomId).emit('chat message', getMessage);
-            });
             socket.on('setUserId', (userId) => {
+                console.log(userId);
                 const user = users.find(user => user.userId === userId);
-                console.log(user);
                 if (user) {
                     user.socketId = socket.id;
                     console.log(`User ${user.Name} connected with socket id ${socket.id}`);
                 }
             });
-            socket.on('sendNotification', ({ userId, message }) => {
-                console.log(userId, message);
-                const user = users.find(user => user.userId === userId);
-                console.log(user);
-                if (user && user.socketId) {
-                    io.to(user.socketId).emit('notification', message);
-                    console.log(`Notification sent to ${user.Name}: ${message}`);
-                }
-            });
 
+            notification(socket, users, io)
+            message(socket, io)
+            quote(socket, io, users)
 
             // Xử lý sự kiện khi một client ngắt kết nối
             socket.on('disconnect', () => {

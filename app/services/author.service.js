@@ -11,6 +11,12 @@ class AuthorService {
         });
         return await cursor;
     }
+    async findAll(filter) {
+        const results = await this.AuthorService.find(
+            filter
+        )
+        return await results.toArray();
+    }
 
 }
 

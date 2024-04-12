@@ -37,6 +37,23 @@ exports.findByBookId = async (req, res, next) => {
     }
 }
 
+exports.findByUserId = async (req, res, next) => {
+    try {
+        const reviewService = new ReviewService(MongoDB.client);
+        const document = await reviewService.findByUserId(req.params.userId);
+        if (!document) {
+            return next(new ApiError(404, "Contact not fuond"));
+        }
+        return res.send(document);
+    } catch (error) {
+        return next(
+            new ApiError(
+                500, `Error retrieving contact with id=${req.params}`
+            )
+        );
+    }
+}
+
 exports.create = async (req, res, next) => {
     if (!req.body?.userId) {
         return next(new ApiError(404, "Contact not fuond"));

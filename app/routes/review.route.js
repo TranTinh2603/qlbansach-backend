@@ -12,4 +12,7 @@ router.route("/")
 
 router.route("/:bookId")
     .get(reviews.findByBookId)
+
+router.route("/find-by-user-id/:userId")
+    .get(reviews.findByUserId)
 module.exports = router;
