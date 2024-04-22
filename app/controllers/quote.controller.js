@@ -1,7 +1,6 @@
 const ApiError = require("../api-error");
 const QuoteService = require("../services/quote.service");
 const TagService = require("../services/tag.service");
-const message = require("../socket/message");
 const MongoDB = require("../utils/mongodb.util");
 
 exports.findByUserId = async (req, res, next) => {
