@@ -58,3 +58,22 @@ exports.findByLiveSearch = async (req, res, next) => {
     }
 }
 
+
+exports.findByNameAuthor = async (req, res, next) => {
+    try {
+        const bookService = new BookService(MongoDB.client);
+        const books = await bookService.find({});
+        const authorName = books.filter(book => book.author.toLowerCase().includes(req.params.authorName.toLowerCase()))
+        if (!authorName) {
+            return next(new ApiError(404, "Contact not fuond"));
+        }
+        return res.send(authorName);
+    } catch (error) {
+        return next(
+            new ApiError(
+                500, `Error retrieving contact with id=${req.params.id}`
+            )
+        );
+    }
+}
+

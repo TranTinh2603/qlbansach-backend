@@ -15,6 +15,8 @@ router.route("/:bookId")
 
 router.route("/review/:reviewId")
     .put(reviews.updateReview)
+    .get(reviews.findByReviewId)
+    .delete(reviews.deleteReview)
 
 router.route("/find-by-user-id/:userId")
     .get(reviews.findByUserId)

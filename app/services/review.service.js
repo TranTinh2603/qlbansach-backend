@@ -58,6 +58,18 @@ class ReviewService {
 
         return result;
     }
+    async findReviewById(reviewId) {
+        return await this.ReviewService.findOne({
+            reviewId: reviewId
+        })
+    }
+    async deleteReview(reviewId) {
+        const result = await this.ReviewService.findOneAndDelete({
+            reviewId: reviewId
+        });
+
+        return result;
+    }
 
 }
 
