@@ -60,7 +60,7 @@ class UserService {
     }
     async findByEmail(email) {
         return await this.User.findOne({
-            Email: email
+            email: email
         });
     }
 
@@ -70,7 +70,7 @@ class UserService {
         };
         const result = await this.User.findOneAndUpdate(
             filter,
-            { $set: { Friends: friends } },
+            { $set: { friends: friends } },
             { returnDocument: "after" }
         );
 

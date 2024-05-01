@@ -1,20 +1,19 @@
-// const ApiError = require("../api-error");
-// const CategoryService = require("../services/category.service");
-// const ProductService = require("../services/product.service");
-// const MongoDB = require("../utils/mongodb.util");
+const ApiError = require("../api-error");
+const CategoryService = require("../services/category.service");
+const MongoDB = require("../utils/mongodb.util");
 
-// exports.findAll = async (req, res, next) => {
-//     let documents = [];
-//     try {
-//         const categoryService = new CategoryService(MongoDB.client);
-//         documents = await categoryService.findAll({});
-//     } catch (error) {
-//         return next(
-//             new ApiError(500, "An error occurred while retrieving contacs")
-//         );
-//     };
-//     return res.send(documents);
-// };
+exports.findAll = async (req, res, next) => {
+    let documents = [];
+    try {
+        const categoryService = new CategoryService(MongoDB.client);
+        documents = await categoryService.findAll({});
+    } catch (error) {
+        return next(
+            new ApiError(500, "An error occurred while retrieving contacs")
+        );
+    };
+    return res.send(documents);
+};
 
 // exports.findByMaTheLoai = async (req, res, next) => {
 //     let documents = [];

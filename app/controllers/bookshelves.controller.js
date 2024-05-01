@@ -10,7 +10,6 @@ exports.create = async (req, res, next) => {
     try {
         const bookshelvesService = new BookshelvesService(MongoDB.client);
         const document = await bookshelvesService.create(req.body);
-        console.log(document);
         return res.send(document);
     } catch (error) {
         return next(

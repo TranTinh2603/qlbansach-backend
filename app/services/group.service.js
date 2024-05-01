@@ -20,10 +20,10 @@ class GroupService {
             status: payload.status,
             country: payload.country,
             affiliatedWebsite: payload.affiliatedWebsite,
-            menbers: payload.menbers,
-            bookShelf: payload.bookShelf,
+            members: payload.members,
+            bookshelfs: payload.bookshelfs,
             discussions: payload.discussions,
-            joinRequest: payload.joinRequest
+            joinRequests: payload.joinRequests
         };
         Object.keys(group).forEach(
             (key) => group[key] === undefined && delete group[key]
@@ -46,10 +46,24 @@ class GroupService {
         return await result.toArray();
     }
 
-    // async find(filter) {
-    //     const cursor = await this.Quote.find(filter);
-    //     return await cursor.toArray();
-    // }
+    async findByMemberId(memberId) {
+        const result = await this.Group.find(
+            { "members.userId": memberId }
+        );
+        return await result.toArray();
+    }
+
+    async findAll(filter) {
+        const cursor = await this.Group.find(filter);
+        return await cursor.toArray();
+    }
+
+    async findByGroupId(groupId) {
+        const result = await this.Group.findOne({
+            groupId: groupId
+        })
+        return result
+    }
 
     //     async findByName(name) {
     //         const cursor = await this.Product.find({
@@ -83,21 +97,21 @@ class GroupService {
     //             MSHH : MSHH
     //         });
     //     }
-    // async update(quoteId, payload) {
-    //     const filter = {
-    //         // _id: ObjectId.isValid(id) ? new ObjectId(id) : null,
-    //         quoteId: quoteId
-    //     };
+    async update(groupId, payload) {
+        const filter = {
+            // _id: ObjectId.isValid(id) ? new ObjectId(id) : null,
+            groupId: groupId
+        };
 
-    //     const update = this.extractQuoteData(payload);
-    //     const result = await this.Quote.findOneAndUpdate(
-    //         filter,
-    //         { $set: update },
-    //         { returnDocument: "after" }
-    //     );
+        const update = this.extractGroupData(payload);
+        const result = await this.Group.findOneAndUpdate(
+            filter,
+            { $set: update },
+            { returnDocument: "after" }
+        );
 
-    //     return result;
-    // }
+        return result;
+    }
 
     // async delete(quoteId) {
     //     const result = await this.Quote.findOneAndDelete({

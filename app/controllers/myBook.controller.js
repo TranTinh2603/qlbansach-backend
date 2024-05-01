@@ -121,3 +121,20 @@ exports.update = async (req, res, next) => {
     }
 };
 
+exports.delete = async (req, res, next) => {
+    try {
+        const myBookService = new MyBookService(MongoDB.client);
+        const document = await myBookService.delete(req.params.id);
+        if (!document) {
+            return next(new ApiError(404, "Contact not found"));
+        }
+        return res.send({ message: "Contact was deleted successfully" });
+    } catch (error) {
+        return next(
+            new ApiError(
+                500, `Could not delete contact with id=${req.params.id}`
+            )
+        );
+    }
+};
+

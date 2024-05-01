@@ -37,3 +37,24 @@ exports.findById = async (req, res, next) => {
         );
     }
 }
+
+exports.findByLiveSearch = async (req, res, next) => {
+    try {
+        const bookService = new BookService(MongoDB.client);
+        const books = await bookService.find({});
+        const documents = books.filter(book => book.name.toLowerCase().includes(req.params.searchText.toLowerCase()))
+
+        // const document = await bookService.findById(req.params.bookId);
+        if (!documents) {
+            return next(new ApiError(404, "Contact not fuond"));
+        }
+        return res.send(documents);
+    } catch (error) {
+        return next(
+            new ApiError(
+                500, `Error retrieving contact with id=${req.params.id}`
+            )
+        );
+    }
+}
+

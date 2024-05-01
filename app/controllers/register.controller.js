@@ -37,14 +37,14 @@ exports.create = async (req, res, next) => {
         const loginService = new LoginService(MongoDB.client);
 
         // Kiểm tra xem có người dùng nào có cùng email như đã gửi hay không
-        const existingUser = await loginService.findByEmail(userData.Email);
+        const existingUser = await loginService.findByEmail(userData.email);
 
         // Nếu không có người dùng nào tồn tại với email đã gửi, tiến hành tạo mới người dùng
         if (!existingUser) {
             const newUser = await loginService.create(userData);
-            return res.json(newUser); // Trả về người dùng mới được tạo thành công
+            return res.send(newUser); // Trả về người dùng mới được tạo thành công
         } else {
-            return res.json({ message: "Tài khoản đã tồn tại" }); // Trả về thông báo lỗi nếu tài khoản đã tồn tại
+            return res.send({ message: "Tài khoản đã tồn tại" }); // Trả về thông báo lỗi nếu tài khoản đã tồn tại
         }
     } catch (error) {
         // Nếu có bất kỳ lỗi nào xảy ra trong quá trình xử lý yêu cầu, bắt và chuyển tiếp lỗi đến middleware xử lý lỗi tiếp theo

@@ -10,4 +10,7 @@ router.route("/")
 router.route("/find/:bookId")
     .get(books.findById)
 
+router.route("/live-search/:searchText")
+    .get(books.findByLiveSearch)
+
 module.exports = router;

@@ -9,7 +9,8 @@ class BookshelvesService {
         const bookshelves = {
             bookshelvesId: payload.bookshelvesId,
             name: payload.name,
-            userId: payload.userId
+            userId: payload.userId,
+            createdAt: payload.createAt
         };
         Object.keys(bookshelves).forEach(
             (key) => bookshelves[key] === undefined && delete bookshelves[key]

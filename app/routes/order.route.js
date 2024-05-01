@@ -1,10 +1,9 @@
-// const express = require("express");
-// const orders = require("../controllers/order.controller");
-// const router = express.Router();
+const express = require("express");
+const orders = require("../controllers/order.controller");
+const router = express.Router();
 
-// router.route("/")
-//     .post(orders.create)
-//     .get(orders.findAll)
+router.route("/")
+    .get(orders.findAll)
 // router.route("/mskh")
 //     .post(orders.findByMSKH)
 // router.route("/:msdh")
@@ -12,4 +11,4 @@
 //     .put(orders.update)
 // router.route("/id/:id")
 //     .delete(orders.delete)
-// module.exports = router;
+module.exports = router;

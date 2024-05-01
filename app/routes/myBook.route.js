@@ -17,4 +17,7 @@ router.route("/find/:userId&:bookId")
     .get(myBooks.findByUserIdAndBookId)
     .put(myBooks.update)
 
+router.route("/my-book/:id")
+    .delete(myBooks.delete)
+
 module.exports = router;

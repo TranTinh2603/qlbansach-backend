@@ -7,11 +7,17 @@ class LoginService {
     }
     extractAccountData(payload) {
         const account = {
-            Email: payload.Email,
-            Password: payload.Password,
-            Name: payload.Name,
-            Birthday: payload.Birthday,
-            Gender: payload.Gender
+            userId: payload.userId,
+            password: payload.password,
+            firstName: payload.firstName,
+            lastName: payload.lastName,
+            createdAt: payload.createdAt,
+            gender: payload.gender,
+            image: payload.image,
+            address: payload.address,
+            birthday: payload.birthday,
+            email: payload.email,
+            friends: payload.friends
         };
         Object.keys(account).forEach(
             (key) => account[key] === undefined && delete account[key]
@@ -19,7 +25,9 @@ class LoginService {
         return account;
     }
     async findByEmail(email) {
-        const result = await this.Account.findOne({ Email: email });
+        const result = await this.Account.findOne(
+            { email: email }
+        );
         return result;
     }
 

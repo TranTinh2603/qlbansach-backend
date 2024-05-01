@@ -11,6 +11,7 @@ class MyBookService {
             userId: payload.userId,
             status: payload.status,
             bookshelves: payload.bookshelves,
+            createdAt: payload.createdAt
         };
         Object.keys(myBook).forEach(
             (key) => myBook[key] === undefined && delete myBook[key]
@@ -56,6 +57,13 @@ class MyBookService {
             { $set: update },
             { returnDocument: "after", upsert: true }
         );
+        return result;
+    }
+    async delete(id) {
+        console.log(id);
+        const result = await this.MyBook.findOneAndDelete({
+            _id: ObjectId.isValid(id) ? new ObjectId(id) : null,
+        });
         return result;
     }
 }

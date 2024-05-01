@@ -1,6 +1,6 @@
-// const ApiError = require("../api-error");
-// const OrderService = require("../services/order.service");
-// const MongoDB = require("../utils/mongodb.util");
+const ApiError = require("../api-error");
+const OrderService = require("../services/order.service");
+const MongoDB = require("../utils/mongodb.util");
 
 // exports.create = async (req, res, next) => {
 //    if (!req.body?.MSKH) {
@@ -35,21 +35,21 @@
 //         );
 //    }
 // };
-// exports.findAll = async (req, res, next) => {
-//     let documents = [];
+exports.findAll = async (req, res, next) => {
+    let documents = [];
 
-//     try {
-//         const orderService = new OrderService(MongoDB.client);
-//         documents = await orderService.find({});
-//     } catch (error) {
-//         return next(
-//             new ApiError(500, "An error occurred while retrieving contacs")
-//         );
-//     };
+    try {
+        const orderService = new OrderService(MongoDB.client);
+        documents = await orderService.findAll({});
+    } catch (error) {
+        return next(
+            new ApiError(500, "An error occurred while retrieving contacs")
+        );
+    };
 
-//     return res.send(documents);
+    return res.send(documents);
 
-// };
+};
 // exports.findOne = async (req, res, next) => {
 //     try {
 //         const orderService = new OrderService(MongoDB.client);

@@ -8,16 +8,16 @@ exports.findByEmail = async (req, res, next) => {
     try {
         console.log(req.body);
         const loginService = new LoginService(MongoDB.client);
-        const document = await loginService.findByEmail(req.body.Email);
+        const document = await loginService.findByEmail(req.body.email);
         if (!document) {
             return next(new ApiError(404, "Email not found"));
         }
-        const hashedStoredPassword = await bcrypt.hash(document.Password, 10);
+        const hashedStoredPassword = await bcrypt.hash(document.password, 10);
 
 
-        const passwordMatch = await bcrypt.compare(req.body.Password, hashedStoredPassword);
+        const passwordMatch = await bcrypt.compare(req.body.password, hashedStoredPassword);
         if (passwordMatch) {
-            const token = jwt.sign({ email: document.Email }, '1234567', { expiresIn: '1h' });
+            const token = jwt.sign({ email: document.email }, '1234567', { expiresIn: '1h' });
             return res.json({ token });
         } else {
             return res.status(401).json({ message: "Tài khoản hoặc mật khẩu không đúng" });

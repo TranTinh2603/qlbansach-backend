@@ -10,7 +10,8 @@ class ReviewService {
             userId: payload.userId,
             rating: payload.rating,
             review: payload.review,
-            createdAt: payload.createdAt
+            createdAt: payload.createdAt,
+            reviewId: payload.reviewId
         };
         Object.keys(review).forEach(
             (key) => review[key] === undefined && delete review[key]
@@ -31,9 +32,7 @@ class ReviewService {
         return await cursor.toArray();
     }
     async create(payload) {
-        console.log(payload);
         const review = this.extractReviewData(payload);
-        console.log('', review);
         const result = await this.ReviewService.insertOne(
             review,
         );
@@ -44,6 +43,20 @@ class ReviewService {
             userId: userId,
         });
         return await cursor.toArray();
+    }
+    async update(reviewId, payload) {
+        const filter = {
+            reviewId: reviewId
+        };
+
+        const update = this.extractReviewData(payload);
+        const result = await this.ReviewService.findOneAndUpdate(
+            filter,
+            { $set: update },
+            { returnDocument: "after" }
+        );
+
+        return result;
     }
 
 }

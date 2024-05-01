@@ -15,6 +15,16 @@ router.route("/update/:id")
 router.route("/update-comment/:id")
     .put(posts.updateComment)
 
+router.route("/update/comment/like/:postId&:commentId")
+    .put(posts.updateLikeComment)
+
+router.route("/comment/:postId&:commentId")
+    .delete(posts.deleteComment)
+
+router.route("/comment/reply/:postId&:commentId&:replyId")
+    .delete(posts.deleteReplyComment)
+
 router.route("/update-reply-comment/:id&:userId&:createdAt")
     .put(posts.updateReplyComment)
+
 module.exports = router;
