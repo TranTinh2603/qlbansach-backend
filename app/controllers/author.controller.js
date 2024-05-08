@@ -18,7 +18,7 @@ exports.findByName = async (req, res, next) => {
         );
     }
 }
-exports.findAll = async (req, res, next) => {
+exports.findLiveSearch = async (req, res, next) => {
     try {
         const authorService = new AuthorService(MongoDB.client);
         let document = await authorService.findAll({});
@@ -28,6 +28,23 @@ exports.findAll = async (req, res, next) => {
             return res.send({ message: "Not Found" })
         }
         return res.send(document);
+    } catch (error) {
+        return next(
+            new ApiError(
+                500, `Error retrieving contact with id=${req.params.name}`
+            )
+        );
+    }
+}
+exports.findAll = async (req, res, next) => {
+    try {
+        const authorService = new AuthorService(MongoDB.client);
+        let documents = await authorService.findAll({});
+        if (!documents) {
+            // return next(new ApiError(404, "Contact not fuond"));
+            return res.send({ message: "Not Found" })
+        }
+        return res.send(documents);
     } catch (error) {
         return next(
             new ApiError(

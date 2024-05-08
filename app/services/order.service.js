@@ -10,8 +10,17 @@ class OrderService {
             orderId: payload.orderId,
             userId: payload.userId,
             orderDate: payload.orderDate,
-            deliveryDate: payload.delivery,
-            status: payload.status
+            status: payload.status,
+            deliveryDate: payload.deliveryDate,
+            infoDelivery: payload.infoDelivery,
+            methodDelivery: payload.methodDelivery,
+            methodPayment: payload.methodPayment,
+            note: payload.note,
+            products: payload.products,
+            promotionalCode: payload.promotionalCode,
+            totalPrice: payload.totalPrice,
+            transportFee: payload.transportFee,
+            totalAmount: payload.totalAmount
         };
         Object.keys(order).forEach(
             (key) => order[key] === undefined && delete order[key]
@@ -19,13 +28,13 @@ class OrderService {
         return order;
     }
 
-    //     async create(payload) {
-    //         const order = this.extractOrderData(payload);
-    //         const result = await this.Order.insertOne(
-    //             order,
-    //         );
-    //         return result;
-    //     }
+    async create(payload) {
+        const order = this.extractOrderData(payload);
+        const result = await this.Order.insertOne(
+            order,
+        );
+        return result;
+    }
 
     async findAll(filter) {
         const cursor = await this.Order.find(filter);
@@ -38,11 +47,11 @@ class OrderService {
     //         return await cursor.toArray();
     //     }
 
-    // //     async findByMaTheLoai(MaTheLoai) {
-    // //         return await this.Product.find({
-    // //             MaTheLoai : MaTheLoai
-    // //         }).toArray();
-    // //     }
+    async findByOrderId(orderId) {
+        return await this.Order.findOne({
+            orderId: orderId
+        });
+    }
 
 
     //     async findBySoDonDH(id) {

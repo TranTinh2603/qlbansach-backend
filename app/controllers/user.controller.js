@@ -146,6 +146,32 @@ exports.updateFridends = async (req, res, next) => {
    }
 };
 
+exports.updateImage = async (req, res, next) => {
+    try {
+        const data = {
+           imageUrl: req.file.path
+        }
+        return res.send(data);
+    } catch (error) {
+        console.log(error);
+    }
+}
+
+exports.updateUser = async (req, res, next) => {
+    try {
+        const userService = new UserService(MongoDB.client);
+        const document = await userService.updateUser(req.params.userId, req.body);
+        if (!document) {
+            return next(new ApiError(404, "Contact not fuond"));
+        }
+        return res.send(document);
+    } catch (error) {
+        console.log(error);
+    }
+}
+
+
+
 // exports.delete = async (req, res, next ) => {
 //     try {
 //         const customerService = new CustomerService(MongoDB.client);

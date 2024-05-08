@@ -2,21 +2,23 @@ const ApiError = require("../api-error");
 const OrderService = require("../services/order.service");
 const MongoDB = require("../utils/mongodb.util");
 
-// exports.create = async (req, res, next) => {
-//    if (!req.body?.MSKH) {
-//         return next(new ApiError(404,"Name can not empty"));
-//    }
+exports.create = async (req, res, next) => {
+    if (!req.body?.orderId) {
+        return next(new ApiError(404, "Name can not empty"));
+    }
 
-//    try {
-//         const orderService = new OrderService(MongoDB.client);
-//         const document = await orderService.create(req.body);
-//         return res.send(document);
-//    } catch (error) {
-//         return next(
-//             new ApiError(500, "An error occurred while creating the staff")
-//         );
-//    }
-// };
+    try {
+        const orderService = new OrderService(MongoDB.client);
+        const document = await orderService.create(req.body);
+        if (document) {
+            return res.send(document);
+        }
+    } catch (error) {
+        return next(
+            new ApiError(500, "An error occurred while creating the staff")
+        );
+    }
+};
 // exports.update = async (req, res, next) => {
 //    if (Object.keys(req.body).length === 0){
 //         return next(new ApiError(400, "Data to update can not be empty"));
@@ -50,22 +52,22 @@ exports.findAll = async (req, res, next) => {
     return res.send(documents);
 
 };
-// exports.findOne = async (req, res, next) => {
-//     try {
-//         const orderService = new OrderService(MongoDB.client);
-//         const document = await orderService.findBySoDonDH(req.params.msdh);
-//         if (!document) {
-//             return next(new ApiError(404, "Contact not fuond"));
-//         }
-//         return res.send(document);
-//     } catch (error) {
-//         return next(
-//             new ApiError(
-//                 500, `Error retrieving contact with id=${req.params.msdh}`
-//             )
-//         );
-//     }
-// }
+exports.findByOrderId = async (req, res, next) => {
+    try {
+        const orderService = new OrderService(MongoDB.client);
+        const document = await orderService.findByOrderId(req.params.orderId);
+        if (!document) {
+            return next(new ApiError(404, "Contact not fuond"));
+        }
+        return res.send(document);
+    } catch (error) {
+        return next(
+            new ApiError(
+                500, `Error retrieving contact with id=${req.params.msdh}`
+            )
+        );
+    }
+}
 // exports.findByMSKH = async (req, res, next) => {
 //     let documents = [];
 //     try {

@@ -11,7 +11,9 @@ class ReviewService {
             rating: payload.rating,
             review: payload.review,
             createdAt: payload.createdAt,
-            reviewId: payload.reviewId
+            reviewId: payload.reviewId,
+            likes: payload.likes,
+            comments: payload.comments
         };
         Object.keys(review).forEach(
             (key) => review[key] === undefined && delete review[key]
@@ -53,6 +55,18 @@ class ReviewService {
         const result = await this.ReviewService.findOneAndUpdate(
             filter,
             { $set: update },
+            { returnDocument: "after" }
+        );
+
+        return result;
+    }
+    async updateLikeReview(reviewId, likes) {
+        const filter = {
+            reviewId: reviewId
+        };
+        const result = await this.ReviewService.findOneAndUpdate(
+            filter,
+            { $set: { likes: likes } },
             { returnDocument: "after" }
         );
 

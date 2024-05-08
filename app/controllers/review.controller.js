@@ -5,7 +5,6 @@ const MongoDB = require("../utils/mongodb.util");
 exports.findByBookIdAndUserId = async (req, res, next) => {
     try {
         const reviewService = new ReviewService(MongoDB.client);
-        console.log(req.params);
         const document = await reviewService.findByUserIdAndBookId(req.params.userId, req.params.bookId);
         if (!document) {
             return next(new ApiError(404, "Contact not fuond"));
@@ -22,7 +21,6 @@ exports.findByBookIdAndUserId = async (req, res, next) => {
 exports.findByBookId = async (req, res, next) => {
     try {
         const reviewService = new ReviewService(MongoDB.client);
-        console.log(req.params);
         const document = await reviewService.findByBookId(req.params.bookId);
         if (!document) {
             return next(new ApiError(404, "Contact not fuond"));
@@ -95,6 +93,29 @@ exports.updateReview = async (req, res, next) => {
     try {
         const reviewService = new ReviewService(MongoDB.client);
         const document = await reviewService.update(req.params.reviewId, req.body);
+        if (!document) {
+            return next(new ApiError(404, "Contact not fuond"));
+        }
+        return res.send({ message: "Contact was updated successfully" });
+    } catch (error) {
+        return next(
+            new ApiError(500, `Error updating contact with id=${req.params.id}`)
+        );
+    }
+};
+
+exports.updateLikeReview = async (req, res, next) => {
+    try {
+        const reviewService = new ReviewService(MongoDB.client);
+        const review = await reviewService.findReviewById(req.params.reviewId);
+        const userLike = req.body.userId
+        const checkLike = review.likes.indexOf(userLike)
+        if (checkLike > -1) {
+            review.likes.splice(checkLike, 1)
+        } else {
+            review.likes.push(userLike);
+        }
+        const document = await reviewService.updateLikeReview(req.params.reviewId, review.likes);
         if (!document) {
             return next(new ApiError(404, "Contact not fuond"));
         }

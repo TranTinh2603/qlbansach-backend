@@ -2,12 +2,19 @@ const express = require("express");
 const users = require("../controllers/user.controller");
 const router = express.Router();
 
+const fileUpload = require("../services/cloudinary.service")
+router.route("/upload")
+    .post(fileUpload('user').single('image'), users.updateImage)
+
 router.route("/")
     .get(users.findAll)
 // .post(users.create)
 
 // router.route("/email")
 //     .post(users.findOne)
+
+router.route("/update/:userId")
+    .put(users.updateUser)
 
 router.route("/:userId")
     .get(users.findByUserId)

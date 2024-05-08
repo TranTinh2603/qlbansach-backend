@@ -7,13 +7,18 @@ class UserService {
     }
     extractUserData(payload) {
         const user = {
-            UserID: payload.userID,
-            Name: payload.Name,
-            Password: payload.Password,
-            Email: payload.Email,
-            Birthday: payload.Birthday,
-            Address: payload.Address,
-            Phone: payload.SoDienThoai
+            userId: payload.userId,
+            password: payload.password,
+            firstName: payload.firstName,
+            lastName: payload.lastName,
+            createdAt: payload.createdAt,
+            gender: payload.gender,
+            image: payload.image,
+            address: payload.address,
+            birthday: payload.birthday,
+            email: payload.email,
+            friends: payload.friends,
+            phone: payload.phone
         };
         Object.keys(user).forEach(
             (key) => user[key] === undefined && delete user[key]
@@ -74,6 +79,17 @@ class UserService {
             { returnDocument: "after" }
         );
 
+        return result;
+    }
+    async updateUser(userId, user) {
+        const filter = {
+            userId: userId
+        };
+        const result = await this.User.findOneAndUpdate(
+            filter,
+            { $set: user },
+            { returnDocument: "after" }
+        );
         return result;
     }
 

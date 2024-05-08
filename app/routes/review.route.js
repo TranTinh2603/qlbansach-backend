@@ -18,6 +18,9 @@ router.route("/review/:reviewId")
     .get(reviews.findByReviewId)
     .delete(reviews.deleteReview)
 
+router.route("/review/like/:reviewId")
+    .put(reviews.updateLikeReview)
+
 router.route("/find-by-user-id/:userId")
     .get(reviews.findByUserId)
 module.exports = router;

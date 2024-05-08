@@ -19,6 +19,8 @@ const friendRequestsRouter = require("./app/routes/friendRequests.router.js");
 const quoteRouter = require("./app/routes/quote.route.js");
 const tagRouter = require("./app/routes/tag.route.js");
 const groupRouter = require("./app/routes/group.route.js");
+const payRouter = require("./app/routes/pay.router.js");
+const imageRouter = require("./app/routes/image.router.js");
 const ApiError = require("./app/api-error.js");
 
 const app = express();
@@ -44,6 +46,9 @@ app.use("/api/bookshelves", bookshelvesRouter);
 app.use("/api/quotes", quoteRouter);
 app.use("/api/tags", tagRouter);
 app.use("/api/groups", groupRouter);
+app.use("/api/pay", payRouter);
+app.use("/api/image", imageRouter)
+
 
 app.use((req, res, next) => {
     return next(new ApiError(404, "Resource not found"));
